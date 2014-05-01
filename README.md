@@ -5,7 +5,7 @@
 
 #### Installation
 
-`npm install mitmjs`
+`npm install -g mitmjs`
 
 Make sure you have **libpcap** installed.
 

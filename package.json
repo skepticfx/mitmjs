@@ -1,6 +1,6 @@
 {
   "name": "mitmjs",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Be a Man-In-The-Middle between two hosts",
   "main": "index.js",
   "preferGlobal": true,

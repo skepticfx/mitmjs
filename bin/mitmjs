@@ -3,7 +3,7 @@
 var arp = require('arpjs');
 var ip = require('ip');
 var argv = require('optimist')
-    .usage('Usage: mitmjs -victim [IP Address] -gateway [IP Address]')
+    .usage('Usage: mitmjs --victim [IP Address] --gateway [IP Address]')
     .alias('v', 'victim')
     .alias('g', 'gateway')
     .alias('i', 'interface')

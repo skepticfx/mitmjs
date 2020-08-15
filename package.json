@@ -26,7 +26,6 @@
     "man in the middle",
     "sslstrip"
   ],
-  "author": "Ahamed Nafeez <ahamed.nafeez@gmail.com> (http://blog.skepticfx.com/)",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/skepticfx/mitmjs/issues"
